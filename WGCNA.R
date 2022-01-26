@@ -1,5 +1,8 @@
-#Weighted gene co-expression network analysis
+#Author: K.T.Shreya
+#Date: 10/12/2021
+#Purpose: Estimate co-expressed ion channels and EMT-related genes from rna-seq and microarray datasets of patients with breast cancer (WGCNA)
 
+#Import libraries
 library(WGCNA)
 library(flashClust)
 
@@ -317,7 +320,7 @@ verboseScatterplot(abs(geneModuleMembership3[moduleGenes, column]),
                    main = paste("TCGA\nModule membership vs. gene significance\n"),
                    cex.main = 0.5, cex.lab = 0.5, cex.axis = 0.5, col = module)
 
-
+#Export results to csv files
 turquoise1 = names(dat1)[dynamicColors1=="brown"]
 yellow2 = names(dat2)[dynamicColors2=="turquoise"]
 turquoise3 = names(dat3)[dynamicColors3=="turquoise"]
@@ -325,7 +328,7 @@ write.csv(turquoise1, file = "NM_GSE42568_mod.csv")
 write.csv(yellow2, file = "NM_GSE52604_mod.csv")
 write.csv(turquoise3, file = "NM_tcga_mod.csv")
 
-#For cytoscape
+#Export files for cytoscape input
 TOM1 = TOMsimilarityFromExpr(dat1, power = 8)
 modules = c("brown", "blue");
 genes = names(dat1)

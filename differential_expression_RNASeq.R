@@ -1,18 +1,20 @@
-#Differential expression - RNA-Seq dataset
+#Author: K.T.Shreya
+#Date: 10/12/2021
+#Purpose: Estimate differentially expressed ion channels and EMT-related genes from rna-seq datasets of patients with breast cancer (DESeq2)
 
+#Import libraries
 library("DESeq2")
 library("ggplot2")
 
-#Data Preprocessing
+#Data import and preprocessing
 file = read.table("ion_genes_breast_cancer_2.csv", sep = '\t',header = TRUE)
 file = file[,4:ncol(file)]
 transpose = t(file)
 write.table(transpose, file = 'ion_genes_breast_cancer_transposed_042221.csv', sep = '\t', row.names=TRUE, col.names=FALSE)
-
 file2 = read.table("ion_genes_breast_cancer_transposed_042221.csv", sep = '\t', header = TRUE, row.names=1, check.names =TRUE)
 dim(file2)
 
-#Data transformation
+#Data transformation to get raw reads required for DESeq2
 file2 = round(2**file2)-1
 dim(file2)
 
@@ -45,6 +47,7 @@ res_d$diffexpressed[res_d$log2FoldChange > 0.6 & res_d$padj < 0.05] <- "UP"
 # if log2Foldchange < -0.6 and pvalue < 0.05, set as "DOWN"
 res_d$diffexpressed[res_d$log2FoldChange < -0.6 & res_d$pvalue < 0.05] <- "DOWN"
 
+#Processing for plotting
 res_d <- cbind(rownames(res_d), data.frame(res_d, row.names=NULL))
 colnames(res_d)[1] <- "genes"
 plot1 = ggplot(res_d, aes(x = log2FoldChange, y = -log10(padj)))+ 
@@ -53,7 +56,8 @@ plot1 = ggplot(res_d, aes(x = log2FoldChange, y = -log10(padj)))+
   geom_vline(xintercept=c(-1,1),lty=4,col="black",lwd=0.8) +
   geom_hline(yintercept = 1.301,lty=4,col="black",lwd=0.8)
 plot1
- 
+
+#Export results to csv files 
 a = res_d[which(res_d$diffexpressed=='UP'),]
 b = res_d[which(res_d$diffexpressed=='DOWN'),]
 write.table(a, file = 'tm_up.csv', sep = '\t', row.names=FALSE, col.names=TRUE)
@@ -66,6 +70,7 @@ res1_d$diffexpressed[res1_d$log2FoldChange > 0.6 & res1_d$padj < 0.05] <- "UP"
 # if log2Foldchange < 0 and pvalue < 0.05, set as "DOWN"
 res1_d$diffexpressed[res1_d$log2FoldChange < -0.6 & res1_d$pvalue < 0.05] <- "DOWN"
 
+#Processing for plotting
 res1_d <- cbind(rownames(res1_d), data.frame(res1_d, row.names=NULL))
 #res1_d = res1_d[-c(1)]
 res1_d
@@ -80,6 +85,7 @@ plot2 = ggplot(res1_d, aes(x = log2FoldChange, y = -log10(padj)))+
   geom_hline(yintercept = 1.301,lty=4,col="black",lwd=0.8)
 plot2
 
+#Export results to csv files 
 c = res1_d[which(res1_d$diffexpressed=='UP'),]
 d = res1_d[which(res1_d$diffexpressed=='DOWN'),]
 write.table(c, file = 'tn_up.csv', sep = '\t', row.names=FALSE, col.names=TRUE)
@@ -92,6 +98,7 @@ res2_d$diffexpressed[res2_d$log2FoldChange > 0.6 & res2_d$padj < 0.05] <- "UP"
 # if log2Foldchange < 0 and pvalue < 0.05, set as "DOWN"
 res2_d$diffexpressed[res2_d$log2FoldChange < -0.6 & res2_d$pvalue < 0.05] <- "DOWN"
 
+#Processing for plotting
 res2_d <- cbind(rownames(res2_d), data.frame(res2_d, row.names=NULL))
 res2_d
 colnames(res2_d)[1] <- "genes"
@@ -101,7 +108,8 @@ plot3 = ggplot(res2_d, aes(x = log2FoldChange, y = -log10(padj)))+
   geom_vline(xintercept=c(-1,1),lty=4,col="black",lwd=0.8) +
   geom_hline(yintercept = 1.301,lty=4,col="black",lwd=0.8)
 plot3
- 
+
+#Export results to csv files 
 e = res2_d[which(res2_d$diffexpressed=='UP'),]
 f = res2_d[which(res2_d$diffexpressed=='DOWN'),]
 write.table(e, file = 'nm_up.csv', sep = '\t', row.names=FALSE, col.names=TRUE)

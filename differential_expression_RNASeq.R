@@ -65,9 +65,9 @@ write.table(b, file = 'tm_down.csv', sep = '\t', row.names=FALSE, col.names=TRUE
 
 #In normal Vs tumor
 res1_d$diffexpressed <- "NO"
-# if log2Foldchange > 0 and pvalue < 0.05, set as "UP" 
+# if log2Foldchange > 0.6 and pvalue < 0.05, set as "UP" 
 res1_d$diffexpressed[res1_d$log2FoldChange > 0.6 & res1_d$padj < 0.05] <- "UP"
-# if log2Foldchange < 0 and pvalue < 0.05, set as "DOWN"
+# if log2Foldchange < -0.6 and pvalue < 0.05, set as "DOWN"
 res1_d$diffexpressed[res1_d$log2FoldChange < -0.6 & res1_d$pvalue < 0.05] <- "DOWN"
 
 #Processing for plotting
@@ -93,9 +93,9 @@ write.table(d, file = 'tn_down.csv', sep = '\t', row.names=FALSE, col.names=TRUE
 
 #In normal Vs metastatic
 res2_d$diffexpressed <- "NO"
-# if log2Foldchange > 0 and pvalue < 0.05, set as "UP" 
+# if log2Foldchange > 0.6 and pvalue < 0.05, set as "UP" 
 res2_d$diffexpressed[res2_d$log2FoldChange > 0.6 & res2_d$padj < 0.05] <- "UP"
-# if log2Foldchange < 0 and pvalue < 0.05, set as "DOWN"
+# if log2Foldchange < -0.6 and pvalue < 0.05, set as "DOWN"
 res2_d$diffexpressed[res2_d$log2FoldChange < -0.6 & res2_d$pvalue < 0.05] <- "DOWN"
 
 #Processing for plotting
